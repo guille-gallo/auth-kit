@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react'
-import { useAuth } from '../hooks/useAuth.js'
+import { useAuth, type UseAuthOptions } from '../hooks/useAuth.js'
 
 interface AuthScreenProps {
   error?: string | null
@@ -49,13 +49,15 @@ interface ProtectedRouteProps {
   loader?: ReactNode
   /** Custom sign-in component (replaces the default AuthScreen) */
   signInScreen?: ReactNode
+  /** Email allowlist — reads VITE_ALLOWED_EMAILS by default */
+  allowedEmails?: string[]
 }
 
 /**
  * Route-level guard. Renders:
  *  1. Loader while auth is initializing
  *  2. Sign-in screen when unauthenticated
- *  3. Children when authenticated
+ *  3. Children when authenticated (and on allowlist)
  *
  * Usage:
  *   <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
@@ -64,8 +66,9 @@ export function ProtectedRoute({
   children,
   loader,
   signInScreen,
+  allowedEmails,
 }: ProtectedRouteProps) {
-  const { session, isLoading, authError, signInWithGoogle } = useAuth()
+  const { session, isLoading, authError, signInWithGoogle } = useAuth({ allowedEmails })
 
   if (isLoading) {
     return (loader as React.ReactElement) ?? <DefaultLoader />
@@ -86,6 +89,10 @@ interface AuthGateProps {
   children: ReactNode
   /** Rendered while loading */
   loader?: ReactNode
+  /** Email allowlist — reads VITE_ALLOWED_EMAILS by default */
+  allowedEmails?: string[]
+  /** Auth options forwarded to useAuth */
+  authOptions?: UseAuthOptions
 }
 
 /**
@@ -97,8 +104,8 @@ interface AuthGateProps {
  *     <App />
  *   </AuthGate>
  */
-export function AuthGate({ children, loader }: AuthGateProps) {
-  const { session, isLoading, authError, signInWithGoogle } = useAuth()
+export function AuthGate({ children, loader, allowedEmails }: AuthGateProps) {
+  const { session, isLoading, authError, signInWithGoogle } = useAuth({ allowedEmails })
 
   if (isLoading) {
     return (loader as React.ReactElement) ?? <DefaultLoader />
