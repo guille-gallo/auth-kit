@@ -1,0 +1,16 @@
+{
+  "$schema": "https://unpkg.com/@changesets/schema@2.0.0/schema.json",
+  "changelog": "@changesets/cli/changelog",
+  "commit": false,
+  "fixed": [],
+  "linked": [],
+  "bump": {
+    "privatePackages": {
+      "version": "patch",
+      "initialVersion": "0.0.1"
+    }
+  },
+  "access": "public",
+  "baseBranch": "main",
+  "updateInternalDependencies": "patch"
+}
