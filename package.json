@@ -47,6 +47,8 @@
   "scripts": {
     "dev": "tsup --watch",
     "build": "tsup",
+    "build:demo": "pnpm --filter demo build",
+    "build:all": "pnpm build && pnpm build:demo",
     "prepare": "tsup",
     "typecheck": "tsc --noEmit",
     "lint": "eslint .",

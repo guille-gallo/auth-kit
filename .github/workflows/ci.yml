@@ -10,8 +10,9 @@ jobs:
   build:
     name: lint, typecheck, test, build (Node ${{ matrix.node }})
     runs-on: ubuntu-latest
-    matrix:
-      node: [20, 22]
+    strategy:
+      matrix:
+        node: [20, 22]
     steps:
       - uses: actions/checkout@v4
 
@@ -38,3 +39,6 @@ jobs:
 
       - name: Build
         run: pnpm build
+
+      - name: Build demo
+        run: pnpm --filter demo build
