@@ -10,3 +10,6 @@ coverage
 .idea
 apps/*/dist
 apps/*/.vercel
+apps/demo/tsconfig.tsbuildinfo
+apps/*/tsconfig.tsbuildinfo
+apps/*/tsconfig.*.tsbuildinfo
