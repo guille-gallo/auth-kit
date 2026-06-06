@@ -1,13 +1,60 @@
 {
   "name": "@guille/auth-kit",
   "version": "0.1.0",
-  "private": true,
+  "description": "Shared Supabase auth layer for React apps — sign-in screen, route guards, and a typed useAuth hook.",
+  "keywords": [
+    "supabase",
+    "auth",
+    "react",
+    "authentication",
+    "google-oauth"
+  ],
+  "license": "MIT",
+  "author": "Guillermo Gallo <guille.gallo88@gmail.com>",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/guille-gallo/auth-kit.git"
+  },
+  "bugs": {
+    "url": "https://github.com/guille-gallo/auth-kit/issues"
+  },
+  "homepage": "https://github.com/guille-gallo/auth-kit#readme",
   "type": "module",
-  "main": "./src/index.ts",
-  "types": "./src/index.ts",
+  "sideEffects": [
+    "**/*.css"
+  ],
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    },
+    "./dist/index.css": "./dist/index.css",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
   "scripts": {
-    "build": "tsc",
-    "typecheck": "tsc --noEmit"
+    "dev": "tsup --watch",
+    "build": "tsup",
+    "prepare": "tsup",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint .",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "changeset": "changeset",
+    "version": "changeset version",
+    "release": "pnpm build && changeset publish"
   },
   "peerDependencies": {
     "@supabase/supabase-js": "^2",
@@ -15,11 +62,23 @@
     "react-dom": "^19"
   },
   "devDependencies": {
+    "@changesets/cli": "^2.31.0",
+    "@eslint/js": "^9.17.0",
     "@supabase/supabase-js": "^2.93.3",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
-    "react": "^19",
-    "react-dom": "^19",
-    "typescript": "^5"
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/react": "^16.1.0",
+    "@types/node": "^22.10.0",
+    "@types/react": "^19.2.0",
+    "@types/react-dom": "^19.2.0",
+    "@typescript-eslint/eslint-plugin": "^8.18.0",
+    "@typescript-eslint/parser": "^8.18.0",
+    "eslint": "^9.17.0",
+    "globals": "^15.14.0",
+    "jsdom": "^25.0.1",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "tsup": "^8.3.5",
+    "typescript": "^5.7.2",
+    "vitest": "^2.1.9"
   }
 }

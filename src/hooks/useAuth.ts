@@ -36,7 +36,7 @@ function extractUrlAuthError(): string | null {
 }
 
 function parseAllowedEmails(): string[] | null {
-  const raw = (typeof import.meta !== 'undefined' && (import.meta as Record<string, any>).env?.VITE_ALLOWED_EMAILS) as string | undefined
+  const raw = (typeof import.meta !== 'undefined' && (import.meta as { env?: Record<string, unknown> }).env?.VITE_ALLOWED_EMAILS) as string | undefined
   if (!raw) return null
   return raw
     .split(',')
