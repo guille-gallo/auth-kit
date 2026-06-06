@@ -45,9 +45,6 @@
     "access": "public",
     "registry": "https://registry.npmjs.org/"
   },
-  "pnpm": {
-    "onlyBuiltDependencies": ["esbuild"]
-  },
   "scripts": {
     "dev": "tsup --watch",
     "build": "tsup",
