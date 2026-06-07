@@ -1,6 +1,6 @@
 {
-  "name": "@guille/auth-kit",
-  "version": "0.2.0",
+  "name": "@guille-gallo/auth-kit",
+  "version": "0.1.0",
   "packageManager": "pnpm@11.3.0",
   "description": "Shared Supabase auth layer for React apps — sign-in screen, route guards, and a typed useAuth hook.",
   "keywords": [

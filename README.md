@@ -1,11 +1,11 @@
-# @guille/auth-kit
+# @guille-gallo/auth-kit
 
 Shared Supabase auth layer for React apps — sign-in screen, route guards, and a typed `useAuth` hook.
 
 ## Install
 
 ```bash
-pnpm add @guille/auth-kit @supabase/supabase-js
+pnpm add @guille-gallo/auth-kit @supabase/supabase-js
 ```
 
 Add the package's CSS once at the app root (e.g. `src/main.tsx`):
