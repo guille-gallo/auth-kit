@@ -87,43 +87,6 @@ describe('useAuth — displayName', () => {
   })
 })
 
-describe('useAuth — allowedEmails allowlist', () => {
-  it('signs out and exposes an error when the user email is not in the allowlist', async () => {
-    holders.client.auth.getSession = vi.fn().mockResolvedValue({
-      data: { session: makeSession('evil@example.com', { full_name: 'Eve' }) },
-      error: null,
-    })
-
-    const { result } = renderHook(() =>
-      useAuth({ allowedEmails: ['good@example.com'] }),
-    )
-
-    await waitFor(() => expect(result.current.isLoading).toBe(false))
-
-    expect(result.current.session).toBeNull()
-    expect(result.current.authError).toMatch(/Access denied/)
-    expect(holders.client.auth.signOut).toHaveBeenCalled()
-  })
-
-  it('allows the user in when the email is in the allowlist', async () => {
-    const session = makeSession('good@example.com', { full_name: 'Good User' })
-    holders.client.auth.getSession = vi.fn().mockResolvedValue({
-      data: { session },
-      error: null,
-    })
-
-    const { result } = renderHook(() =>
-      useAuth({ allowedEmails: ['good@example.com'] }),
-    )
-
-    await waitFor(() => expect(result.current.isLoading).toBe(false))
-
-    expect(result.current.session).toBe(session)
-    expect(result.current.authError).toBeNull()
-    expect(holders.client.auth.signOut).not.toHaveBeenCalled()
-  })
-})
-
 describe('useAuth — URL error extraction', () => {
   it('captures error_description from the URL and strips it', async () => {
     window.history.replaceState({}, '', '/?error_description=oauth_failed')

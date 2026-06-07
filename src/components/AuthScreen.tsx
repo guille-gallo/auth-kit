@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react'
-import { useAuth, type UseAuthOptions } from '../hooks/useAuth.js'
+import { useAuth } from '../hooks/useAuth.js'
 import './AuthScreen.css'
 
 interface AuthScreenProps {
@@ -52,17 +52,14 @@ interface ProtectedRouteProps {
   loader?: ReactNode
   /** Custom sign-in component (replaces the default AuthScreen) */
   signInScreen?: ReactNode
-  /** Email allowlist — reads VITE_ALLOWED_EMAILS by default */
-  allowedEmails?: string[]
 }
 
 export function ProtectedRoute({
   children,
   loader,
   signInScreen,
-  allowedEmails,
 }: ProtectedRouteProps) {
-  const { session, isLoading, authError, signInWithGoogle } = useAuth({ allowedEmails })
+  const { session, isLoading, authError, signInWithGoogle } = useAuth()
 
   if (isLoading) {
     return (loader as React.ReactElement) ?? <DefaultLoader />
@@ -83,14 +80,10 @@ interface AuthGateProps {
   children: ReactNode
   /** Rendered while loading */
   loader?: ReactNode
-  /** Email allowlist — reads VITE_ALLOWED_EMAILS by default */
-  allowedEmails?: string[]
-  /** Auth options forwarded to useAuth */
-  authOptions?: UseAuthOptions
 }
 
-export function AuthGate({ children, loader, allowedEmails }: AuthGateProps) {
-  const { session, isLoading, authError, signInWithGoogle } = useAuth({ allowedEmails })
+export function AuthGate({ children, loader }: AuthGateProps) {
+  const { session, isLoading, authError, signInWithGoogle } = useAuth()
 
   if (isLoading) {
     return (loader as React.ReactElement) ?? <DefaultLoader />

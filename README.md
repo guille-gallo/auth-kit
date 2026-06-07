@@ -11,7 +11,7 @@ pnpm add @guille-gallo/auth-kit @supabase/supabase-js
 Add the package's CSS once at the app root (e.g. `src/main.tsx`):
 
 ```ts
-import '@guille/auth-kit/dist/index.css'
+import '@guille-gallo/auth-kit/dist/index.css'
 ```
 
 Set the following env vars (Vite projects):
@@ -19,15 +19,12 @@ Set the following env vars (Vite projects):
 ```
 VITE_SUPABASE_URL=https://your-project.supabase.co
 VITE_SUPABASE_ANON_KEY=your-anon-key
-
-# Optional — comma-separated allowlist of emails.
-# VITE_ALLOWED_EMAILS=you@example.com,teammate@example.com
 ```
 
 ## Quick start
 
 ```tsx
-import { AuthGate, useAuth } from '@guille/auth-kit'
+import { AuthGate, useAuth } from '@guille-gallo/auth-kit'
 
 export default function App() {
   return (
@@ -52,26 +49,19 @@ function SignedIn() {
 
 | Export | Kind | Description |
 |---|---|---|
-| `useAuth(options?)` | hook | Returns `{ session, user, displayName, isLoading, authError, signInWithGoogle, signOut }`. |
+| `useAuth()` | hook | Returns `{ session, user, displayName, isLoading, authError, signInWithGoogle, signOut }`. |
 | `AuthGate` | component | Renders the `AuthScreen` until the user is signed in, then renders `children`. |
 | `ProtectedRoute` | component | Per-route guard with the same gating logic. |
 | `AuthScreen` | component | The default Google sign-in screen. |
 | `getSupabaseClient(url?, anonKey?)` | function | Lazy singleton. Reads `VITE_SUPABASE_URL` / `VITE_SUPABASE_ANON_KEY` from `import.meta.env` (Vite) or `process.env` (CJS/Node) when no args are passed. |
 | `resetSupabaseClient()` | function | Clears the cached client. |
 
-### `UseAuthOptions`
-
-```ts
-interface UseAuthOptions {
-  /** Comma-separated allowlist of emails. Reads VITE_ALLOWED_EMAILS by default. */
-  allowedEmails?: string[]
-}
-```
+> **Note on access control:** this package does not enforce who can sign in. With the default Supabase + Google OAuth setup, any Google user that completes the OAuth flow gets a session. To restrict access, configure it at the Supabase level: disable public sign-ups, write Row Level Security policies on your tables, and/or use Supabase Auth Hooks. See the Supabase auth docs for the recommended approach.
 
 ## Repository layout
 
 ```
-auth-kit/                   # this package — published to npm as @guille/auth-kit
+auth-kit/                   # this package — published to npm as @guille-gallo/auth-kit
   src/                      # source (built to dist/ via tsup)
   tests/                    # vitest + @testing-library/react
   dist/                     # build output (gitignored)

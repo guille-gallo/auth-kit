@@ -13,3 +13,4 @@ apps/*/.vercel
 apps/demo/tsconfig.tsbuildinfo
 apps/*/tsconfig.tsbuildinfo
 apps/*/tsconfig.*.tsbuildinfo
+tsconfig.tsbuildinfo

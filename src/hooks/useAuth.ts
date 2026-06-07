@@ -35,29 +35,7 @@ function extractUrlAuthError(): string | null {
   return desc
 }
 
-function parseAllowedEmails(): string[] | null {
-  const raw = (typeof import.meta !== 'undefined' && (import.meta as { env?: Record<string, unknown> }).env?.VITE_ALLOWED_EMAILS) as string | undefined
-  if (!raw) return null
-  return raw
-    .split(',')
-    .map(e => e.trim().toLowerCase())
-    .filter(Boolean)
-}
-
-function normalizeEmail(email: string): string {
-  return email.trim().toLowerCase()
-}
-
 // ── Public types ─────────────────────────────────────
-
-export interface UseAuthOptions {
-  /**
-   * Comma-separated allowlist of emails. If set, only these users can sign in.
-   * Reads from VITE_ALLOWED_EMAILS env by default.
-   * Pass an empty array [] to allow everyone.
-   */
-  allowedEmails?: string[]
-}
 
 export interface UseAuthReturn {
   session: Session | null
@@ -71,19 +49,12 @@ export interface UseAuthReturn {
 
 // ── Hook ──────────────────────────────────────────────
 
-export function useAuth(options?: UseAuthOptions): UseAuthReturn {
+export function useAuth(): UseAuthReturn {
   const supabase = useMemo(() => getSupabaseClient(), [])
 
   const [session, setSession] = useState<Session | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [authError, setAuthError] = useState<string | null>(null)
-
-  const allowList = useMemo(() => {
-    if (options?.allowedEmails !== undefined) {
-      return options.allowedEmails.map(normalizeEmail)
-    }
-    return parseAllowedEmails()
-  }, [options?.allowedEmails])
 
   useEffect(() => {
     let mounted = true
@@ -96,14 +67,7 @@ export function useAuth(options?: UseAuthOptions): UseAuthReturn {
       if (!mounted) return
       if (error) setAuthError(error.message)
       else if (data.session?.user) {
-        const email = normalizeEmail(data.session.user.email ?? '')
-        if (allowList && !allowList.includes(email)) {
-          await supabase.auth.signOut()
-          setAuthError(`Access denied. ${email} is not authorized.`)
-          setSession(null)
-        } else {
-          setSession(data.session)
-        }
+        setSession(data.session)
       } else {
         setSession(null)
       }
@@ -111,18 +75,8 @@ export function useAuth(options?: UseAuthOptions): UseAuthReturn {
     }
     load()
 
-    const { data: sub } = supabase.auth.onAuthStateChange(async (_event, next) => {
+    const { data: sub } = supabase.auth.onAuthStateChange((_event, next) => {
       if (!mounted) return
-      if (next?.user) {
-        const email = normalizeEmail(next.user.email ?? '')
-        if (allowList && !allowList.includes(email)) {
-          await supabase.auth.signOut()
-          setAuthError(`Access denied. ${email} is not authorized.`)
-          setSession(null)
-          setIsLoading(false)
-          return
-        }
-      }
       setSession(next)
       setIsLoading(false)
       setAuthError(null)
@@ -132,7 +86,7 @@ export function useAuth(options?: UseAuthOptions): UseAuthReturn {
       mounted = false
       sub.subscription.unsubscribe()
     }
-  }, [supabase, allowList])
+  }, [supabase])
 
   const signInWithGoogle = async () => {
     setAuthError(null)
